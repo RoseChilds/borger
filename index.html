@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script src="borger/res/html2canvas.min.js?v=8"></script>
+    <script async src="https://arc.io/widget.min.js#x8X5VoFf"></script>
+    <style media="screen">
+      html, body{
+        width: 100%;
+        height: 100%;
+        user-select: none;
+      }
+      html {
+        overflow: hidden;
+      }
+      @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+      html *, html *:before, html *:after {
+        box-sizing: border-box;
+        transition: 0.5s ease-in-out;
+      }
+      .dabutton foo{
+        transition: none;
+      }
+      body{
+        font-family: 'Open Sans', sans-serif;
+        margin:0;
+        background: #23272A;
+        color: #fff;
+        text-align: center;
+      }
+      .bigtitle{
+        font-size: 5rem;
+        display: block;
+      }
+      .bititle::before{
+        content: '&nbsp;';
+      }
+      #download {
+        color:#7289DA;
+        cursor:pointer;
+      }
+      a {
+        text-decoration: none;
+        line-height: 80px;
+        color: black;
+        cursor: pointer;
+      }
+      .dabutton {
+        border-radius: 15px;
+        color: #7289DA;
+        position: relative;
+        display: block;
+        overflow: hidden;
+        width: 15rem;
+        height: 80px;
+        max-width: 250px;
+        margin: 1rem auto;
+        text-transform: uppercase;
+        border: 1px solid #7289DA;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+      .dabutton.disabled {
+        border: 1px solid #BDBDBD;
+      }
+      .dabutton span {
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background-color: #7289DA;
+        transition: width 0.4s ease-in-out, height 0.4s ease-in-out;
+        transform: translate(-50%, -50%);
+        z-index: -1;
+      }
+      .dabutton.disabled span {
+        background-color: #BDBDBD;
+        transition: 0.5s ease-in-out;
+      }
+      .dabutton:hover {
+        color: #fff;
+        font-size: 1.5rem;
+        -webkit-animation: shake 0.05s ease-in-out 0.05s infinite alternate;
+      }
+      @-webkit-keyframes shake {
+       from {
+          -webkit-transform: rotate(0.5deg);
+       }
+       to {
+         -webkit-transform-origin:center center;
+         -webkit-transform: rotate(-0.5deg);
+       }
+      }
+      .dabutton.disabled:hover {
+        font-size: 1rem;
+        -webkit-animation: none;
+      }
+      .dabutton:hover span {
+        width: 225%;
+        height: 562.5px;
+      }
+      .dabutton:active {
+        background-color: #fff;
+      }
+      .borger {
+        width: 10rem;
+        height: fit-content;
+        margin: 0 auto;
+        overflow: hidden;
+      }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://unpkg.com/typewriter-effect@2.3.1/dist/core.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q==" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <title>Borger</title>
+  </head>
+  <body>
+    <div id="preload" style="display:none"></div>
+    <div class="" id="title">
+      <small>concept and art by julie ❤️</small>
+      <h1 class="bigtitle" id="thetitle">&nbsp;</h1>
+      <input type="range" min="0" max="50" value="5" class="slider" id="howmanyfillings">
+      <br>
+      <label for="howmanyfillings">Fillings: <span id="amountoffillings">5</span></label>
+      <a class="dabutton disabled" id="giveborger"><foo>Loading 0/0</foo><span></span></a>
+    </div>
+    <br><br>
+    <div class="borger" id="cont">
+    </div>
+    <script type="text/javascript">
+      $('.dabutton')
+      .on('mouseenter', function(e) {
+        var parentOffset = $(this).offset(),
+            relX = e.pageX - parentOffset.left,
+            relY = e.pageY - parentOffset.top;
+        $(this).find('span').css({top:relY, left:relX})
+      })
+      .on('mouseout', function(e) {
+        var parentOffset = $(this).offset(),
+            relX = e.pageX - parentOffset.left,
+            relY = e.pageY - parentOffset.top;
+        $(this).find('span').css({top:relY, left:relX})
+      });
+      var typewriter = new Typewriter(document.getElementById('thetitle'), {
+        delay: 50,
+        cursor: ''
+      });
+      checkForOne = function(arr){
+        return (new Set(arr)).size === 1;
+      }
+      typewriter.typeString("Borger.").start();
+      $(document).on('input', '#howmanyfillings', function() {
+        $('#amountoffillings').html($(this).val());
+      });
+      var possible = ["burger", "cheese", "egg", "lettuce", "onion", "pickles", "tomato", "ketchup", "bacon"];
+      var loading = ["top", "bottom"];
+      loading = loading.concat(possible);
+      $("#giveborger foo").text(`LOADING 0/${loading.length}`);
+      var version = 24;
+      var loaded = 0;
+      for(const toload of loading){
+        $.ajax({
+          url: `https://solithcy.xyz/borger/res/${toload}.png?v=${version}`,
+          success: function() {
+            loaded+=1;
+            $("#giveborger foo").text(`LOADING ${loaded}/${loading.length}`);
+            if(loaded>=loading.length){
+              $("#giveborger").removeClass('disabled');
+              $("#giveborger foo").text('GIB DA BORGER');
+            }
+          }
+        });
+      }
+      $("#giveborger").click(function(){
+        if($("#giveborger").hasClass('disabled')){
+          return;
+        }
+        $("#giveborger").addClass('disabled');
+        $("#giveborger foo").text("MAKING DA BORGER");
+        $("#cont").fadeOut(500);
+        setTimeout(function(){
+          $("#cont").html("");
+          $("#cont").append(`<div id="downloadcont" style="position:relative; margin-bottom:1rem;"><span id="download" data-html2canvas-ignore="true">Download</span></div>`);
+          var amount = parseInt($("#howmanyfillings").val())+2;
+          if(amount>52){
+            amount=52;
+          }
+          var toadd = [];
+          var has = [];
+          var ing = [];
+          var whatitis;
+          for(i=0;i<amount;i++){
+            if(i==0){
+              thething="top";
+            }else if(i==(amount-1)){
+              thething="bottom";
+            }else{
+              while(1){
+                thething = possible[Math.floor(Math.random()*possible.length)];
+                if(whatitis!=thething){
+                  whatitis=thething;
+                  break;
+                }
+              }
+              ing.push(thething);
+            }
+            has.push(thething);
+            $("#cont").append(`<div id="part${i}" style="position:relative; margin-bottom: ${(() => {
+              if(i==(amount-1)){
+                return '1rem';
+              }
+              if(thething=="top"){
+                return `-2.9rem`
+              }
+              return '-3.65rem';
+            })()};z-index:${amount-i}; ${(() => {
+              if(["top", "bottom"].includes(thething)){
+                return ``;
+              }
+              return `left: ${(Math.random() * 2100-1000)/1250}rem`
+            })()}" class="filling"><img src="https://solithcy.xyz/borger/res/${thething}.png?v=${version}" style="z-index:${amount-i}; height: ${(() => {
+              if(thething=="top"){
+                return `3.2rem`
+              }
+              return `3.75rem`
+            })()};width:auto;" alt=""></div>`);
+            toadd.push(`#part${i}`)
+          }
+          var tl = anime.timeline({
+            easing: 'easeOutExpo',
+            duration: 750
+          });
+          toadd=toadd.reverse();
+          for(const thingy of toadd){
+            anime({
+              targets: thingy,
+              translateY: '-27.5rem',
+              duration: 0
+            });
+            tl.add({
+              targets: thingy,
+              translateY: 0,
+            }, "-=550");
+          }
+          anime({
+            targets: '#downloadcont',
+            translateY: '-27.5rem',
+            duration: 0
+          });
+          tl.add({
+            targets: '#downloadcont',
+            translateY: 0,
+          }, "-=550");
+          $("#cont").css("display", "block");
+          $("#download").unbind();
+          $("#download").click(function(){
+            $("#download").text("Rendering..");
+            html2canvas(document.getElementById("cont"), {backgroundColor: null, scale: 3}).then(function(canvas) {
+              $("#download").text("Downloading..");
+              ReImg.fromCanvas(canvas).downloadPng();
+              $("#download").text("Downloaded!");
+              $("#download").unbind();
+            });
+          });
+          tl.finished.then(
+            function(){
+              setTimeout(function(){
+                if(amount==2){
+                  typewriter.deleteAll().typeString("I like it plain").pauseFor(1000).deleteAll().typeString("Borger.").start();
+                }else if(checkForOne(ing)){
+                  switch (ing[0]) {
+                    case "cheese":
+                      typewriter.deleteAll().typeString("cheeeeeeeeeese").pauseFor(1000).deleteAll().typeString("Borger.").start();
+                      break;
+                    default:
+                      break;
+                  }
+                }else {
+                  var signature = "";
+                  for(const i of ing.reverse()){
+                    signature=signature+i.substring(0,3)
+                  }
+                  console.log(`Borger signature: ${signature}`);
+                  switch (signature) {
+                    case "lettomcheburpicburche":
+                      typewriter.deleteAll().typeString("The Birb borger").pauseFor(1000).deleteAll().typeString("Borger.").start();
+                      break;
+                    default:
+                      break;
+                  }
+                }
+                $("#giveborger").removeClass('disabled');
+                $("#giveborger foo").text('GIB DA BORGER');
+              }, 1000);
+            }
+          );
+        }, 600);
+      });
+    </script>
+  </body>
+</html>
